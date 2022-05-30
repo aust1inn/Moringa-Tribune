@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render,redirect
 import datetime as dt
 from .models import Article
+from .forms import NewsLetterForm
 
 
 # Create your views here.
@@ -15,8 +16,15 @@ def news_of_day(request):
     
     # FUNCTION TO CONVERT DATE OBJECT TO FIND EXACT DAY
     day = convert_dates(date)
+
+    if request.method == 'POST':
+        form= NewsLetterForm(request.POST)
+        if form.is_valid():
+            print('valid')
+        else:
+            form=NewsLetterForm()    
     
-    return render(request,'all-news/today-news.html', {"date":date ,"news":news})
+    return render(request, 'all-news/today-news.html', {"date": date,"news":news,"letterForm":form})
 
 def convert_dates(dates):
 
